@@ -46,8 +46,8 @@ def check_cinder_scheduler_log(word):
         os.system("ssh %s grep %s /var/log/cinder/scheduler.log" % (svr, word))
     print
 
-
-parser = optparse.OptionParser()
+usage = 'usage: %prog [options] keyword'
+parser = optparse.OptionParser(usage=usage)
 parser.add_option("-a", "--api", action='store_true',
                   default=False, dest='api',
                   help="check cinder-api log")
@@ -63,6 +63,8 @@ parser.add_option("-s", "--scheduler", action='store_true',
 
 (options, remainder) = parser.parse_args()
 
+if not remainder:
+    print "No keyword provided. Run 'check_cinder_log.py -h' to show usage."
 if options.api:
     check_cinder_api_log(remainder[0])
 if options.volume:
@@ -71,4 +73,3 @@ if options.backup:
     check_cinder_backup_log(remainder[0])
 if options.scheduler:
     check_cinder_scheduler_log(remainder[0])
-
